@@ -13,9 +13,11 @@ Schlage einen Vodka-Cocktail mit zwei Zutaten vor, benenne ihn nach dem Schema V
 
 Beispiele:
 - Vodka-O: Vodka mit Orangensaft
+- Vodka-E: Vodka mit Eistee
 - Vodka-G: Vodka mit Gurkenwasser
 - Vodka-K: Vodka mit Kaffee-Likör
 - Vodka-Z: Vodka mit Zucker
+- Vodka-K: Vodka mit Kiwisaft
 - Vodka-M: Vodka mit Minzlikör
 
 Vorschlag:"""
