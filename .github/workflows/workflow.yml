@@ -57,3 +57,9 @@ jobs:
         with:
           exec: helm upgrade vodka-az . --install --namespace=vodka-az --atomic
           kubeconfig: '${{ secrets.KUBECONFIG_RAW }}'
+      - name: Clean up old container images
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: vodka-az
+          package-type: container
+          min-versions-to-keep: 10
