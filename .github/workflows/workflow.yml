@@ -1,0 +1,59 @@
+name: Workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request: { }
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    container: python:3.10-slim
+    steps:
+      - name: Install Poetry
+        run: pip install poetry==1.4.0
+      - uses: actions/checkout@v3
+      - run: poetry install
+      - name: Check coding standards
+        run: |
+          poetry run black --check src/
+          poetry run mypy src/
+
+
+  push_docker:
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+    if: success() && github.ref == 'refs/heads/main'
+    steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ github.token }}
+      - name: Build and push container image
+        uses: docker/build-push-action@v4
+        with:
+          build-args: APP_VERSION=${{ github.sha }}
+          push: true
+          tags: ghcr.io/preparingforexams/vodka-az:${{ github.sha }}
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - push_docker
+    concurrency: production
+    steps:
+      - uses: actions/checkout@v3
+      - name: Substitute environment variables in values.yaml
+        run: "envsubst < values.yaml > values_sub.yaml && mv values_sub.yaml values.yaml"
+        env:
+          OPENAI_TOKEN: ${{ secrets.OPENAI_TOKEN }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      - uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm upgrade vodka-az . --install --namespace=vodka-az --atomic
+          kubeconfig: '${{ secrets.KUBECONFIG_RAW }}'

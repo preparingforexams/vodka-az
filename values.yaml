@@ -1,0 +1,9 @@
+image:
+  app: ghcr.io/preparingforexams/vodka-az:${GITHUB_SHA}
+
+openai:
+  apiKey: ${OPENAI_TOKEN}
+sentry:
+  dsn: ${SENTRY_DSN}
+telegram:
+  apiKey: ${TELEGRAM_TOKEN}
