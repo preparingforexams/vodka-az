@@ -4,7 +4,7 @@ from typing import Any
 import aiohttp
 import openai
 from telegram import Update
-from telegram.ext import Application, CommandHandler, CallbackContext
+from telegram.ext import Application, CommandHandler
 
 from az.config import Config
 
@@ -46,7 +46,13 @@ class AzBot:
         )
 
     def run(self) -> None:
-        app = Application.builder().token(self.config.telegram.token).build()
+        app = (
+            Application.builder()
+            .token(self.config.telegram.token)
+            .get_updates_http_version("1.1")
+            .http_version("1.1")
+            .build()
+        )
         app.add_handler(CommandHandler("suggestion", self._suggest))
         app.run_polling()
 
