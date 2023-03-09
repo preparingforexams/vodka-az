@@ -10,6 +10,7 @@ from az.config import Config
 
 _PROMPT = """
 Schlage einen Vodka-Cocktail mit zwei Zutaten vor, benenne ihn nach dem Schema Vodka-<name>.
+Scheue nicht vor ungewöhnlichen Zutaten zurück!
 
 Beispiele:
 - Vodka-O: Vodka mit Orangensaft
@@ -17,6 +18,7 @@ Beispiele:
 - Vodka-G: Vodka mit Gurkenwasser
 - Vodka-K: Vodka mit Kaffee-Likör
 - Vodka-Z: Vodka mit Zucker
+- Vodka-C: Vodka mit Cranberrysaft
 - Vodka-K: Vodka mit Kiwisaft
 - Vodka-M: Vodka mit Minzlikör
 
