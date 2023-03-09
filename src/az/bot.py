@@ -19,6 +19,7 @@ Beispiele:
 - Vodka-K: Vodka mit Kaffee-Likör
 - Vodka-Z: Vodka mit Zucker
 - Vodka-C: Vodka mit Cranberrysaft
+- Vodka-S: Vodka mit Sekt
 - Vodka-K: Vodka mit Kiwisaft
 - Vodka-M: Vodka mit Minzlikör
 
