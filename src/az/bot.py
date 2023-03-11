@@ -38,6 +38,8 @@ Beispiele:
 - Vodka-T: Vodka mit Tomatensaft
 - Vodka-R: Vodka mit Rosmarinsirup
 - Vodka-B: Vodka mit Blaubeerlikör
+- Vodka-J: Vodka mit Johannisbeersaft
+- Vodka-H: Vodka mit Honig
 
 Vorschlag:"""
 
