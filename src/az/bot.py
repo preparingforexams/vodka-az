@@ -30,6 +30,14 @@ Beispiele:
 - Vodka-C: Vodka mit Cranberrysaft
 - Vodka-L: Vodka mit Litschi
 - Vodka-Z: Vodka mit Zimt
+- Vodka-W: Vodka mit Wassermelone
+- Vodka-M: Vodka mit Mangosaft
+- Vodka-M: Vodka mit Maracujasaft
+- Vodka-A: Vodka mit Apfelsaft
+- Vodka-A: Vodka mit Ananassaft
+- Vodka-T: Vodka mit Tomatensaft
+- Vodka-R: Vodka mit Rosmarinsirup
+- Vodka-B: Vodka mit Blaubeerlikör
 
 Vorschlag:"""
 
