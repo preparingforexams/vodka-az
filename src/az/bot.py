@@ -10,8 +10,8 @@ from az.config import Config
 
 _PROMPT = """
 Schlage einen Vodka-Cocktail mit zwei Zutaten vor, benenne ihn nach dem Schema Vodka-<name>.
-Scheue nicht vor ungewöhnlichen Zutaten zurück! Solange es essbar bzw. trinkbar ist, ist
-es ein guter Vorschlag!
+Bevorzuge ungewöhnliche Zutaten! Solange es essbar bzw. trinkbar ist, ist es ein guter
+Vorschlag!
 
 Beispiele:
 - Vodka-O: Vodka mit Orangensaft
