@@ -5,6 +5,7 @@ from typing import Any, TypedDict
 import aiohttp
 import openai
 from telegram import Update
+from telegram.error import TimedOut
 from telegram.ext import Application, CommandHandler
 
 from az.config import Config
@@ -25,7 +26,7 @@ Schlage einen Vodka-Cocktail mit zwei Zutaten vor, benenne ihn nach dem Schema V
 Bevorzuge ungewöhnliche Zutaten! Solange es essbar bzw. trinkbar ist, ist es ein guter
 Vorschlag!
 
-Beispiele:
+Eine Liste von Beispielen:
 - Vodka-O: Vodka mit Orangensaft
 - Vodka-E: Vodka mit Eistee
 - Vodka-G: Vodka mit Gurkenwasser
@@ -86,7 +87,14 @@ class AzBot:
             .build()
         )
         app.add_handler(CommandHandler("suggestion", self._suggest))
-        app.run_polling()
+
+        retry = True
+        while retry:
+            retry = False
+            try:
+                app.run_polling(read_timeout=5)
+            except TimedOut:
+                retry = True
 
     async def _suggest_drink(self) -> str:
         response = await openai.ChatCompletion.acreate(  # type: ignore

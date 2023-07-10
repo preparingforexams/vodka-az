@@ -10,7 +10,7 @@ COPY [ "poetry.toml", "poetry.lock", "pyproject.toml", "./" ]
 # We don't want the tests
 COPY src/az ./src/az
 
-RUN poetry install --no-dev
+RUN poetry install --only main
 
 ARG APP_VERSION
 ENV APP_VERSION=$APP_VERSION
