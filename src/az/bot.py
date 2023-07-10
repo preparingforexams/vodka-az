@@ -6,7 +6,7 @@ import aiohttp
 import openai
 from telegram import Update
 from telegram.ext import Application, CommandHandler
-
+import httpx
 from az.config import Config
 
 
@@ -88,11 +88,7 @@ class AzBot:
         )
 
     def run(self) -> None:
-        app = (
-            Application.builder()
-            .token(self.config.telegram.token)
-            .build()
-        )
+        app = Application.builder().token(self.config.telegram.token).build()
         app.add_handler(CommandHandler("suggestion", self._suggest))
         app.run_polling(read_timeout=5)
 
@@ -112,15 +108,15 @@ class AzBot:
         return result
 
     async def _create_image(self, drink: str) -> bytes:
-        response = await openai.Image.acreate(  # type: ignore
+        prompt_response = await openai.Image.acreate(  # type: ignore
             prompt=drink,
             n=1,
             size="1024x1024",
             response_format="url",
         )
 
-        url = response["data"][0]["url"]
+        url = prompt_response["data"][0]["url"]
 
-        async with aiohttp.ClientSession() as session:
-            response = await session.get(url, timeout=20)
-            return await response.read()
+        async with httpx.AsyncClient(timeout=20) as client:
+            image_response = await client.get(url, timeout=20)
+            return await image_response.aread()
