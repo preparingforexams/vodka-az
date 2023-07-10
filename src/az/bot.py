@@ -98,7 +98,7 @@ class AzBot:
 
     async def _suggest_drink(self) -> str:
         response = await openai.ChatCompletion.acreate(  # type: ignore
-            model="gpt-3.5-turbo",
+            model="gpt-4",
             max_tokens=75,
             messages=[
                 Message(role=Role.USER, content=_PROMPT),
