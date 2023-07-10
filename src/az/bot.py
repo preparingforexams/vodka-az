@@ -81,8 +81,6 @@ class AzBot:
         _LOG.info("Received /suggestion command. Generating...")
 
         drink = await self._suggest_drink()
-        await message.reply_text(drink)
-        return
         image = await self._create_image(drink)
         await message.reply_photo(
             photo=image,
