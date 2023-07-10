@@ -91,8 +91,6 @@ class AzBot:
         app = (
             Application.builder()
             .token(self.config.telegram.token)
-            .get_updates_http_version("1.1")
-            .http_version("1.1")
             .build()
         )
         app.add_handler(CommandHandler("suggestion", self._suggest))
@@ -101,7 +99,7 @@ class AzBot:
     async def _suggest_drink(self) -> str:
         response = await openai.ChatCompletion.acreate(  # type: ignore
             model="gpt-3.5-turbo",
-            max_tokens=75,
+            max_tokens=100,
             temperature=1.5,
             messages=[
                 Message(role=Role.SYSTEM, content=_SYSTEM_PROMPT),
