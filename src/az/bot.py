@@ -33,12 +33,12 @@ Gute Beispiele:
 - Vodka-O: Vodka mit Orangensaft
 - Vodka-E: Vodka mit Eistee
 - Vodka-G: Vodka mit Gurkenwasser
-- Vodka-K: Vodka mit Kaffee-Likör
+- Vodka-K: Vodka mit Kaffee
 - Vodka-Z: Vodka mit Zucker
 - Vodka-C: Vodka mit Cranberrysaft
 - Vodka-S: Vodka mit Sekt
 - Vodka-K: Vodka mit Kiwisaft
-- Vodka-M: Vodka mit Minzlikör
+- Vodka-M: Vodka mit Minze
 - Vodka-P: Vodka mit Pinienkernen
 - Vodka-P: Vodka mit Pfirsichsaft
 - Vodka-L: Vodka mit Limonade
@@ -53,9 +53,11 @@ Gute Beispiele:
 - Vodka-A: Vodka mit Ananassaft
 - Vodka-T: Vodka mit Tomatensaft
 - Vodka-R: Vodka mit Rosmarinsirup
-- Vodka-B: Vodka mit Blaubeerlikör
+- Vodka-B: Vodka mit Blaubeersaft
 - Vodka-J: Vodka mit Johannisbeersaft
 - Vodka-H: Vodka mit Honig
+- Vodka-Q: Vodka mit Quittensaft
+- Vodka-X: Vodka mit Xylit
 """
 
 _USER_PROMPT = """
@@ -79,6 +81,8 @@ class AzBot:
         _LOG.info("Received /suggestion command. Generating...")
 
         drink = await self._suggest_drink()
+        await message.reply_text(drink)
+        return
         image = await self._create_image(drink)
         await message.reply_photo(
             photo=image,
@@ -100,6 +104,7 @@ class AzBot:
         response = await openai.ChatCompletion.acreate(  # type: ignore
             model="gpt-3.5-turbo",
             max_tokens=75,
+            temperature=1.5,
             messages=[
                 Message(role=Role.SYSTEM, content=_SYSTEM_PROMPT),
                 Message(role=Role.USER, content=_USER_PROMPT),
