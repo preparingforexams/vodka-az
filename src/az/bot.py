@@ -1,5 +1,6 @@
 import logging
-from typing import Any
+from enum import Enum
+from typing import Any, TypedDict
 
 import aiohttp
 import openai
@@ -7,6 +8,17 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler
 
 from az.config import Config
+
+
+class Role(str, Enum):
+    USER = "user"
+    SYSTEM = "system"
+
+
+class Message(TypedDict):
+    role: Role
+    content: str
+
 
 _PROMPT = """
 Schlage einen Vodka-Cocktail mit zwei Zutaten vor, benenne ihn nach dem Schema Vodka-<name>.
@@ -40,8 +52,7 @@ Beispiele:
 - Vodka-B: Vodka mit Blaubeerlikör
 - Vodka-J: Vodka mit Johannisbeersaft
 - Vodka-H: Vodka mit Honig
-
-Vorschlag:"""
+"""
 
 _LOG = logging.getLogger(__name__)
 
@@ -78,16 +89,15 @@ class AzBot:
         app.run_polling()
 
     async def _suggest_drink(self) -> str:
-        response = await openai.Completion.acreate(  # type: ignore
-            model="text-davinci-003",
-            prompt=_PROMPT,
-            temperature=1,
+        response = await openai.ChatCompletion.acreate(  # type: ignore
+            model="gpt-3.5-turbo",
             max_tokens=75,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0,
+            messages=[
+                Message(role=Role.USER, content=_PROMPT),
+            ],
         )
-        return response.choices[0].text
+
+        return response.choices[0].message.content
 
     async def _create_image(self, drink: str) -> bytes:
         response = await openai.Image.acreate(  # type: ignore
