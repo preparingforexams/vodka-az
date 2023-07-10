@@ -89,7 +89,6 @@ class AzBot:
         app.add_handler(CommandHandler("suggestion", self._suggest))
         app.run_polling(read_timeout=5)
 
-
     async def _suggest_drink(self) -> str:
         response = await openai.ChatCompletion.acreate(  # type: ignore
             model="gpt-4",
