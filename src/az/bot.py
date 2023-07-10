@@ -87,14 +87,8 @@ class AzBot:
             .build()
         )
         app.add_handler(CommandHandler("suggestion", self._suggest))
+        app.run_polling(read_timeout=5)
 
-        retry = True
-        while retry:
-            retry = False
-            try:
-                app.run_polling(read_timeout=5)
-            except TimedOut:
-                retry = True
 
     async def _suggest_drink(self) -> str:
         response = await openai.ChatCompletion.acreate(  # type: ignore
