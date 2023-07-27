@@ -3,10 +3,11 @@ from enum import Enum
 from typing import Any, TypedDict
 
 import aiohttp
+import httpx
 import openai
 from telegram import Update
 from telegram.ext import Application, CommandHandler
-import httpx
+
 from az.config import Config
 
 

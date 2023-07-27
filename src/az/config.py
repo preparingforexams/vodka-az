@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import cast, Iterable, overload
+from typing import Iterable, cast, overload
 
 from dotenv import dotenv_values
 

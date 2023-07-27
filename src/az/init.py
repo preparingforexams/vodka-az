@@ -3,7 +3,7 @@ import logging
 import openai
 import sentry_sdk
 
-from az.config import load_env, Config, SentryConfig
+from az.config import Config, SentryConfig, load_env
 
 _LOG = logging.getLogger(__name__)
 
