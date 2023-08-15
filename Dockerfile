@@ -20,5 +20,5 @@ RUN poetry install --only=main
 ARG APP_VERSION
 ENV APP_VERSION=$APP_VERSION
 
-ENTRYPOINT [ "python", "-m", "az" ]
+ENTRYPOINT [ "poetry", "run", "python", "-m", "az" ]
 CMD [ "handle-updates" ]
