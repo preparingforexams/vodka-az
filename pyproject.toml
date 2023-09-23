@@ -17,9 +17,9 @@ sentry-sdk = "^1.14.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.0.0"
-isort = "^5.12.0"
 mypy = "^1.5.0"
 pytest = "^7.4.0"
+ruff = "0.0.289"
 types-requests = "^2.28.11"
 
 [build-system]
@@ -35,3 +35,8 @@ module = "tests.*"
 strict = false
 check_untyped_defs = true
 disallow_untyped_defs = false
+
+[tool.ruff]
+extend-select = [
+    "I001",
+]
