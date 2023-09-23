@@ -43,3 +43,6 @@ disallow_untyped_defs = false
 extend-select = [
     "I001",
 ]
+
+[tool.ruff.isort]
+known-first-party = ["az"]
