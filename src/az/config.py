@@ -1,7 +1,5 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
-from typing import Iterable, cast, overload
+from typing import Iterable, Self, cast, overload
 
 from dotenv import dotenv_values
 
@@ -141,7 +139,7 @@ class OpenAiConfig:
     token: str
 
     @classmethod
-    def from_env(cls, env: Env) -> OpenAiConfig:
+    def from_env(cls, env: Env) -> Self:
         token = env.get_string("OPENAI_TOKEN")
 
         if not token:
@@ -158,7 +156,7 @@ class SentryConfig:
     release: str
 
     @classmethod
-    def from_env(cls, env: Env) -> SentryConfig | None:
+    def from_env(cls, env: Env) -> Self | None:
         dsn = env.get_string("SENTRY_DSN")
 
         if not dsn:
@@ -171,27 +169,12 @@ class SentryConfig:
 
 
 @dataclass
-class Config:
-    openai: OpenAiConfig
-    sentry: SentryConfig | None
-    telegram: TelegramConfig
-
-    @classmethod
-    def from_env(cls, env: Env) -> Config:
-        return cls(
-            openai=OpenAiConfig.from_env(env),
-            sentry=SentryConfig.from_env(env),
-            telegram=TelegramConfig.from_env(env),
-        )
-
-
-@dataclass
 class TelegramConfig:
     token: str
     polling_timeout: int
 
     @classmethod
-    def from_env(cls, env: Env) -> TelegramConfig:
+    def from_env(cls, env: Env) -> Self:
         token = env.get_string("TELEGRAM_TOKEN")
         if token is None:
             raise ValueError("No Telegram token")
@@ -199,4 +182,19 @@ class TelegramConfig:
         return cls(
             token=token,
             polling_timeout=env.get_int("TELEGRAM_POLLING_TIMEOUT", 10),
+        )
+
+
+@dataclass
+class Config:
+    openai: OpenAiConfig
+    sentry: SentryConfig | None
+    telegram: TelegramConfig
+
+    @classmethod
+    def from_env(cls, env: Env) -> Self:
+        return cls(
+            openai=OpenAiConfig.from_env(env),
+            sentry=SentryConfig.from_env(env),
+            telegram=TelegramConfig.from_env(env),
         )
