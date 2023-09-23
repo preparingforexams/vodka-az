@@ -1,24 +1,47 @@
-FROM python:3.11-slim
+FROM python:3.11-slim AS base
 
-RUN useradd --system --create-home --home-dir /app -s /bin/bash app
+RUN groupadd --system --gid 500 app
+RUN useradd --system --uid 500 --gid app --create-home --home-dir /app -s /bin/bash app
+
+RUN apt-get update -qq \
+    && apt-get install -y --no-install-recommends \
+      curl \
+      tini \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# renovate: datasource=pypi depName=poetry
+ENV POETRY_VERSION=1.6.1
+ENV POETRY_HOME="/opt/poetry"
+ENV POETRY_VIRTUALENVS_IN_PROJECT=false
+ENV PATH="$POETRY_HOME/bin:$PATH"
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
 USER app
-ENV PATH=$PATH:/app/.local/bin
-
 WORKDIR /app
 
-RUN pip install pipx==1.2.0 --user --no-cache
-RUN pipx install poetry==1.6.1
-RUN poetry config virtualenvs.create false
-
 COPY [ "poetry.toml", "poetry.lock", "pyproject.toml", "./" ]
+
+RUN poetry install --no-interaction --ansi --only=main --no-root
+
+FROM base AS dev
+
+COPY src ./src
+
+RUN poetry install --no-interaction --ansi
+
+ENTRYPOINT [ "tini", "--" ]
+
+FROM base AS prod
 
 # We don't want the tests
 COPY src/az ./src/az
 
-RUN poetry install --only=main
+RUN poetry install --no-interaction --ansi --only=main
 
 ARG APP_VERSION
 ENV APP_VERSION=$APP_VERSION
 
-ENTRYPOINT [ "poetry", "run", "python", "-m", "az" ]
+ENTRYPOINT [ "tini", "--", "poetry", "run", "python", "-m", "az" ]
 CMD [ "handle-updates" ]
