@@ -2,7 +2,6 @@ import logging
 from enum import Enum
 from typing import Any, TypedDict
 
-import aiohttp
 import httpx
 import openai
 from telegram import Update
