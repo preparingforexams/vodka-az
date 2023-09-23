@@ -25,20 +25,12 @@ COPY [ "poetry.toml", "poetry.lock", "pyproject.toml", "./" ]
 
 RUN poetry install --no-interaction --ansi --only=main --no-root
 
-FROM base AS dev
-
-COPY src ./src
-
-RUN poetry install --no-interaction --ansi
-
-ENTRYPOINT [ "tini", "--" ]
-
 FROM base AS prod
 
 # We don't want the tests
 COPY src/az ./src/az
 
-RUN poetry install --no-interaction --ansi --only=main
+RUN poetry install --no-interaction --ansi --only-root
 
 ARG APP_VERSION
 ENV APP_VERSION=$APP_VERSION

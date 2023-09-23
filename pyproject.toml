@@ -1,9 +1,12 @@
 [tool.poetry]
-name = "az"
+name = "vodka-az"
 description = "Vodka A-Z"
 version = "1.0.0"
 authors = ["OpenAlcoholics <team@openalcoholics.group>"]
 license = "MIT"
+packages = [
+    { include = "az", from = "src" }
+]
 
 [tool.poetry.dependencies]
 certifi = "2023.7.22"
