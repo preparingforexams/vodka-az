@@ -1,4 +1,5 @@
 import logging
+import signal
 from enum import Enum
 from typing import Any, TypedDict
 
@@ -90,7 +91,10 @@ class AzBot:
     def run(self) -> None:
         app = Application.builder().token(self.config.telegram.token).build()
         app.add_handler(CommandHandler("suggestion", self._suggest))
-        app.run_polling(read_timeout=5)
+        app.run_polling(
+            read_timeout=5,
+            stop_signals=[signal.SIGTERM],
+        )
 
     async def _suggest_drink(self) -> str:
         response = await openai.ChatCompletion.acreate(  # type: ignore
