@@ -2,8 +2,9 @@ import logging
 
 import openai
 import sentry_sdk
+from bs_config import Env
 
-from az.config import Config, SentryConfig, load_env
+from az.config import Config, SentryConfig
 
 _LOG = logging.getLogger(__name__)
 
@@ -29,7 +30,7 @@ def _setup_sentry(config: SentryConfig | None) -> None:
 def initialize() -> Config:
     _setup_logging()
 
-    config = Config.from_env(load_env(""))
+    config = Config.from_env(Env.load(include_default_dotenv=True))
     _setup_sentry(config.sentry)
 
     openai.api_key = config.openai.token

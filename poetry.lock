@@ -212,6 +212,28 @@ jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
+name = "bs-config"
+version = "1.0.0"
+description = "Config"
+optional = false
+python-versions = ">=3.11,<3.13"
+files = [
+    {file = "bs_config-1.0.0-py3-none-any.whl", hash = "sha256:1c42d83cbd6768fa080d8322d35dbf398744b08fe63f529921780848e3761e57"},
+    {file = "bs_config-1.0.0.tar.gz", hash = "sha256:ab1f9a77596ca3639c1206dd68be83881773cb6ba6dbc6d20defabc66dbf440c"},
+]
+
+[package.dependencies]
+python-dotenv = {version = ">=1.0.0,<2.0.0", optional = true, markers = "extra == \"dotenv\""}
+
+[package.extras]
+dotenv = ["python-dotenv (>=1.0.0,<2.0.0)"]
+
+[package.source]
+type = "legacy"
+url = "https://pypi.blindfolded.surgery"
+reference = "internal"
+
+[[package]]
 name = "certifi"
 version = "2023.7.22"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -1020,4 +1042,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "8bcf3fdd2aef4a6b95a8837250169cbcff7b526029a09ba7d14c9386ccdf0562"
+content-hash = "723bdfb58f3a5daafe798552ca4cbf61ced9aaf17d52fd98b9595eba51a70e6e"
