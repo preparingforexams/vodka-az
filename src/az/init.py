@@ -1,6 +1,5 @@
 import logging
 
-import openai
 import sentry_sdk
 from bs_config import Env
 
@@ -32,7 +31,5 @@ def initialize() -> Config:
 
     config = Config.from_env(Env.load(include_default_dotenv=True))
     _setup_sentry(config.sentry)
-
-    openai.api_key = config.openai.token
 
     return config

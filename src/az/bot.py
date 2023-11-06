@@ -1,25 +1,13 @@
 import logging
 import signal
-from enum import Enum
-from typing import Any, TypedDict
+from typing import Any
 
 import httpx
-import openai
+from openai import AsyncOpenAI
 from telegram import Update
 from telegram.ext import Application, CommandHandler
 
 from az.config import Config
-
-
-class Role(str, Enum):
-    USER = "user"
-    SYSTEM = "system"
-
-
-class Message(TypedDict):
-    role: Role
-    content: str
-
 
 _SYSTEM_PROMPT = """
 Du bist ein Assistent, der Nutzern bei der Getränkeauswahl hilft, indem du einen
@@ -71,6 +59,11 @@ _LOG = logging.getLogger(__name__)
 class AzBot:
     def __init__(self, config: Config):
         self.config = config
+        self.http_client = httpx.AsyncClient(timeout=20)
+        self.open_ai = AsyncOpenAI(
+            api_key=config.openai.token,
+            http_client=self.http_client,
+        )
 
     async def _suggest(self, update: Update, _: Any) -> None:
         message = update.message
@@ -97,30 +90,36 @@ class AzBot:
         )
 
     async def _suggest_drink(self) -> str:
-        response = await openai.ChatCompletion.acreate(  # type: ignore
+        response = await self.open_ai.chat.completions.create(
             model="gpt-3.5-turbo",
             max_tokens=100,
             temperature=1.5,
             messages=[
-                Message(role=Role.SYSTEM, content=_SYSTEM_PROMPT),
-                Message(role=Role.USER, content=_USER_PROMPT),
+                dict(role="system", content=_SYSTEM_PROMPT),
+                dict(role="user", content=_USER_PROMPT),
             ],
         )
 
         result = response.choices[0].message.content
+
+        if not result:
+            raise ValueError("Received empty message as response")
+
         _LOG.debug("Received suggestion: %s", result)
         return result
 
     async def _create_image(self, drink: str) -> bytes:
-        prompt_response = await openai.Image.acreate(  # type: ignore
+        prompt_response = await self.open_ai.images.generate(
             prompt=drink,
             n=1,
             size="1024x1024",
             response_format="url",
         )
 
-        url = prompt_response["data"][0]["url"]
+        url = prompt_response.data[0].url
 
-        async with httpx.AsyncClient(timeout=20) as client:
-            image_response = await client.get(url, timeout=20)
-            return await image_response.aread()
+        if not url:
+            raise ValueError("Received empty url as response")
+
+        image_response = await self.http_client.get(httpx.URL(url), timeout=20)
+        return await image_response.aread()
