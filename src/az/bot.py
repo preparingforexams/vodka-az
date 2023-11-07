@@ -110,7 +110,8 @@ class AzBot:
 
     async def _create_image(self, drink: str) -> bytes:
         prompt_response = await self.open_ai.images.generate(
-            prompt=drink,
+            model="dall-e-3",
+            prompt=f"Ein Longdrink, wie folgt beschrieben: {drink}",
             n=1,
             size="1024x1024",
             response_format="url",
