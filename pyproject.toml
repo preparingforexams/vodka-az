@@ -27,7 +27,7 @@ sentry-sdk = "^1.14.0"
 black = "^23.0.0"
 mypy = "~1.7"
 pytest = "^7.4.0"
-ruff = "0.1.6"
+ruff = "0.1.7"
 types-requests = "^2.28.11"
 
 [build-system]
