@@ -11,7 +11,7 @@ kind: StatefulSet
 metadata:
   name: update-handler
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: update-handler
@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: {{ .Values.image.app }}
+          image: {{ .Values.image.app }}:{{ .Values.appVersion }}
           envFrom:
             - secretRef:
                 name: secrets
