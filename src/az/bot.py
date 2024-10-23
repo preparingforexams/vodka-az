@@ -139,5 +139,5 @@ class AzBot:
         if not url:
             raise ValueError("Received empty url as response")
 
-        image_response = await self.http_client.get(httpx.URL(url), timeout=20)
+        image_response = await self.http_client.get(httpx.URL(url), timeout=60)
         return await image_response.aread()
