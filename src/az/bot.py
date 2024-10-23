@@ -4,7 +4,7 @@ from typing import Any
 
 import httpx
 from openai import AsyncOpenAI
-from telegram import Update
+from telegram import Bot, Update, User
 from telegram.ext import Application, CommandHandler
 
 from az.config import Config
@@ -81,12 +81,29 @@ class AzBot:
             caption=drink,
         )
 
+    async def _post_init(
+        self,
+        app: Application,  # type: ignore[type-arg]
+    ) -> None:
+        bot: Bot = app.bot
+        bot_user: User = bot.bot
+        _LOG.info(
+            "Initialized as bot %s (%s)",
+            bot_user.first_name,
+            bot_user.username,
+        )
+
     def run(self) -> None:
-        app = Application.builder().token(self.config.telegram.token).build()
+        app = (
+            Application.builder()
+            .token(self.config.telegram.token)
+            .post_init(self._post_init)
+            .build()
+        )
         app.add_handler(CommandHandler("suggestion", self._suggest))
         app.run_polling(
             read_timeout=5,
-            stop_signals=[signal.SIGTERM],
+            stop_signals=[signal.SIGTERM, signal.SIGINT],
         )
 
     async def _suggest_drink(self) -> str:
