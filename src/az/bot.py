@@ -108,7 +108,7 @@ class AzBot:
 
     async def _suggest_drink(self) -> str:
         response = await self.open_ai.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-2024-08-06",
             max_tokens=100,
             temperature=1.5,
             messages=[
