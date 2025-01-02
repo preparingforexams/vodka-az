@@ -12,6 +12,7 @@ metadata:
   name: update-handler
 spec:
   replicas: 1
+  revisionHistoryLimit: 0
   selector:
     matchLabels:
       app: update-handler
@@ -21,12 +22,21 @@ spec:
       labels:
         app: update-handler
     spec:
+      serviceAccountName: vodka
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: app
           image: {{ .Values.image.app }}:{{ .Values.appVersion }}
           envFrom:
             - secretRef:
                 name: secrets
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
           resources:
             requests:
               cpu: 20m
