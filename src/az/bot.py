@@ -96,13 +96,13 @@ class AzBot:
     def run(self) -> None:
         app = (
             Application.builder()
+            .get_updates_read_timeout(5)
             .token(self.config.telegram.token)
             .post_init(self._post_init)
             .build()
         )
         app.add_handler(CommandHandler("suggestion", self._suggest))
         app.run_polling(
-            read_timeout=5,
             stop_signals=[signal.SIGTERM, signal.SIGINT],
         )
 
