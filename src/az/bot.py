@@ -134,7 +134,11 @@ class AzBot:
             response_format="url",
         )
 
-        url = prompt_response.data[0].url
+        response_data = prompt_response.data
+        if not response_data:
+            raise ValueError("Received empty response data")
+
+        url = response_data[0].url
 
         if not url:
             raise ValueError("Received empty url as response")
