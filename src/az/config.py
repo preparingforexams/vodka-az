@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Self
 
 from bs_config import Env
+from bs_nats_updater import NatsConfig
 
 
 @dataclass
@@ -57,6 +58,7 @@ class TelegramConfig:
 
 @dataclass
 class Config:
+    nats: NatsConfig
     openai: OpenAiConfig
     sentry: SentryConfig | None
     telegram: TelegramConfig
@@ -64,6 +66,7 @@ class Config:
     @classmethod
     def from_env(cls, env: Env) -> Self:
         return cls(
+            nats=NatsConfig.from_env(env.scoped("NATS_")),
             openai=OpenAiConfig.from_env(env),
             sentry=SentryConfig.from_env(env),
             telegram=TelegramConfig.from_env(env),

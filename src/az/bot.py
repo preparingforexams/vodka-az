@@ -3,6 +3,7 @@ import signal
 from typing import Any
 
 import httpx
+from bs_nats_updater import create_updater
 from openai import AsyncOpenAI
 from telegram import Bot, Update, User
 from telegram.ext import Application, CommandHandler
@@ -96,8 +97,7 @@ class AzBot:
     def run(self) -> None:
         app = (
             Application.builder()
-            .get_updates_read_timeout(5)
-            .token(self.config.telegram.token)
+            .updater(create_updater(self.config.telegram.token, self.config.nats))
             .post_init(self._post_init)
             .build()
         )
